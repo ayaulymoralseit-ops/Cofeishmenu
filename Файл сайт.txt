@@ -1,0 +1,604 @@
+```html
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOFEiSH — Дәмді кофе мекені</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #0c0806;
+            color: #f3eae1;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Анимациялар */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        @keyframes float-delay {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(-10deg); }
+        }
+        @keyframes steam {
+            0% { transform: translateY(0) scale(0.9); opacity: 0.3; }
+            50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; }
+            100% { transform: translateY(-20px) scale(1.3); opacity: 0; }
+        }
+        .anim-float-1 {
+            animation: float-slow 6s ease-in-out infinite;
+        }
+        .anim-float-2 {
+            animation: float-delay 8s ease-in-out infinite;
+        }
+        .steam-line {
+            animation: steam 3s infinite ease-in-out;
+        }
+        /* Шыны панельдер */
+        .glass-panel {
+            background: rgba(28, 20, 16, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(243, 234, 225, 0.08);
+        }
+        .coffee-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4a373;
+            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.15);
+        }
+        /* Интерактивті кофе элементтері */
+        .interactive-bean {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .interactive-bean:hover {
+            transform: scale(1.3) rotate(25deg);
+            filter: drop-shadow(0 0 15px #d4a373);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Навигациялық панель -->
+    <header class="fixed w-full z-50 transition-all duration-300 glass-panel">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Логотип -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-[#d4a373] rounded-full flex items-center justify-center text-[#0c0806] font-bold text-xl relative overflow-hidden transition-transform group-hover:rotate-12">
+                    <i class="fa-solid fa-mug-hot"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-extrabold tracking-widest text-[#d4a373] font-serif">KOFE<span class="text-white">iSH</span></span>
+                    <span class="text-[9px] tracking-widest text-gray-400 uppercase">Premium Quality</span>
+                </div>
+            </a>
+
+            <!-- Сілтемелер -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wider">
+                <a href="#hero" class="hover:text-[#d4a373] transition-colors">Басты бет</a>
+                <a href="#menu" class="hover:text-[#d4a373] transition-colors">Мәзір</a>
+                <a href="#interactive" class="hover:text-[#d4a373] transition-colors">Интерактивті аймақ</a>
+                <a href="#contacts" class="hover:text-[#d4a373] transition-colors">Біз қайдамыз?</a>
+            </nav>
+
+            <!-- WhatsApp арқылы тапсырыс беру -->
+            <a href="https://wa.me/77076929582" target="_blank" class="bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold px-5 py-2.5 rounded-full text-xs tracking-wider uppercase flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-md shadow-[#25D366]/20">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Тапсырыс беру
+            </a>
+        </div>
+    </header>
+
+    <!-- 1. Басты бет (Эспрессо дайындау видеосы) -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Фондағы эстетикалық кофе видеосы -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0c0806]/95 via-[#0c0806]/85 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0c0806] via-transparent to-transparent z-10"></div>
+            
+            <video class="w-full h-full object-cover scale-105 filter brightness-50 contrast-125" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=1920">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-coffee-maker-machine-brewing-espresso-40156-large.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="relative z-20 max-w-7xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center pt-24">
+            <div class="space-y-6">
+                <span class="inline-flex items-center gap-2 bg-[#d4a373]/10 text-[#d4a373] text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-[#d4a373]/20 animate-pulse">
+                    <i class="fa-solid fa-fire-flame-curved"></i> Жаңа піскен балғын кофе
+                </span>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-none font-serif text-white">
+                    Эспрессоның <br>
+                    <span class="text-[#d4a373] relative">
+                        нағыз сиқыры
+                        <span class="absolute left-0 bottom-1 w-full h-[6px] bg-[#d4a373]/30 rounded"></span>
+                    </span>
+                </h1>
+                <p class="text-gray-300 text-base md:text-lg max-w-md leading-relaxed">
+                    Үлкен кадрларда бейнеленген шынайы эспрессо дайындалуынан шабыт алыңыз. Әрбір тамшысында терең хош иіс пен теңдессіз дәм бар.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="#menu" class="bg-[#d4a373] hover:bg-[#b07d50] text-[#0c0806] font-bold text-sm tracking-wider uppercase px-8 py-4 rounded-full text-center transition-all duration-300 hover:scale-105 shadow-lg shadow-[#d4a373]/25">
+                        <i class="fa-solid fa-mug-saucer mr-2"></i> Мәзірді көру
+                    </a>
+                    <a href="#interactive" class="border border-white/20 hover:border-[#d4a373] hover:text-[#d4a373] text-white font-bold text-sm tracking-wider uppercase px-8 py-4 rounded-full text-center transition-all duration-300 backdrop-blur-sm">
+                        <i class="fa-solid fa-circle-play mr-2"></i> PUSH аймағы
+                    </a>
+                </div>
+            </div>
+
+            <!-- Кофе кесесі SVG -->
+            <div class="hidden md:flex justify-center relative">
+                <div class="absolute w-80 h-80 bg-[#d4a373]/10 rounded-full filter blur-3xl -z-10 animate-pulse"></div>
+                
+                <div class="relative flex flex-col items-center">
+                    <!-- Бу анимациясы -->
+                    <div class="flex gap-2 mb-2">
+                        <div class="w-1.5 h-12 bg-gradient-to-t from-[#d4a373] to-transparent rounded-full steam-line" style="animation-delay: 0.1s;"></div>
+                        <div class="w-1.5 h-16 bg-gradient-to-t from-[#d4a373] to-transparent rounded-full steam-line" style="animation-delay: 0.5s;"></div>
+                        <div class="w-1.5 h-10 bg-gradient-to-t from-[#d4a373] to-transparent rounded-full steam-line" style="animation-delay: 0.3s;"></div>
+                    </div>
+                    
+                    <svg class="w-64 h-64 anim-float-1 drop-shadow-2xl" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M40 70C40 70 40 140 100 140C160 140 160 70 160 70H40Z" fill="#e6ccb2" stroke="#d4a373" stroke-width="6"/>
+                        <path d="M160 85C175 85 185 92.5 185 102.5C185 112.5 175 120 160 120" stroke="#d4a373" stroke-width="6" stroke-linecap="round"/>
+                        <rect x="30" y="140" width="140" height="8" rx="4" fill="#d4a373"/>
+                        <ellipse cx="100" cy="70" rx="55" ry="15" fill="#432818"/>
+                        <ellipse cx="100" cy="70" rx="45" ry="10" fill="#9e2a2b" opacity="0.4"/>
+                        <ellipse cx="90" cy="70" rx="30" ry="6" fill="#ddb892" opacity="0.6"/>
+                    </svg>
+
+                    <!-- Қозғалатын элементтер (PUSH жасауға болады) -->
+                    <div class="absolute top-12 -left-12 anim-float-2 interactive-bean" onclick="triggerPop(this)">
+                        <span class="text-4xl">☕</span>
+                    </div>
+                    <div class="absolute bottom-16 -right-12 anim-float-1 interactive-bean" style="animation-delay: 2s;" onclick="triggerPop(this)">
+                        <span class="text-3xl">🫘</span>
+                    </div>
+                    <div class="absolute -bottom-8 left-16 anim-float-2 style="animation-delay: 4s;" interactive-bean" onclick="triggerPop(this)">
+                        <span class="text-2xl">🌱</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Мәзір Бөлімі -->
+    <section id="menu" class="py-24 relative overflow-hidden">
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-[#d4a373]/5 rounded-full filter blur-3xl"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#9e2a2b]/5 rounded-full filter blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center max-w-xl mx-auto mb-16 space-y-4">
+                <span class="text-[#d4a373] font-semibold tracking-widest text-xs uppercase">Мәзірімізді ашыңыз</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold font-serif tracking-tight text-white">
+                    Хош иісті кофе картасы
+                </h2>
+                <p class="text-gray-400 text-sm">
+                    Біздегі кофелер стандартты <span class="text-[#d4a373] font-semibold">300 мл / 400 мл / 500 мл</span> көлемінде ұсынылады. Төменде қосымша дәмдеуіштерді таңдай аласыз.
+                </p>
+            </div>
+
+            <!-- Сүт пен сироптарды баптау блоктары -->
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+                <!-- Альтернативті сүт -->
+                <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-[#d4a373] text-center shadow-lg">
+                    <div class="flex items-center justify-center gap-2 text-[#d4a373] font-bold text-base mb-2">
+                        <i class="fa-solid fa-seedling"></i>
+                        <span>Альтернативті сүт</span>
+                    </div>
+                    <p class="text-gray-300 text-xs mb-3">Бадам, кокос немесе сұлы сүтін қосу</p>
+                    <div class="inline-block bg-[#d4a373]/20 text-[#d4a373] px-4 py-1.5 rounded-full font-bold text-xs">
+                        Бағасы: +390 ₸
+                    </div>
+                </div>
+
+                <!-- Қарапайым сүт -->
+                <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-[#d4a373] text-center shadow-lg">
+                    <div class="flex items-center justify-center gap-2 text-[#d4a373] font-bold text-base mb-2">
+                        <i class="fa-solid fa-cow"></i>
+                        <span>Қарапайым сүт қосу</span>
+                    </div>
+                    <p class="text-gray-300 text-xs mb-3">Қосымша қарапайым сиыр сүтін қосу</p>
+                    <div class="inline-block bg-[#d4a373]/20 text-[#d4a373] px-4 py-1.5 rounded-full font-bold text-xs">
+                        Бағасы: +100 ₸
+                    </div>
+                </div>
+
+                <!-- Сироптар -->
+                <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-[#d4a373] text-center shadow-lg">
+                    <div class="flex items-center justify-center gap-2 text-[#d4a373] font-bold text-base mb-2">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span>Тәтті сироп қосу</span>
+                    </div>
+                    <p class="text-gray-300 text-xs mb-3">Карамель, ваниль немесе кокос сироптары</p>
+                    <div class="inline-block bg-[#d4a373]/20 text-[#d4a373] px-4 py-1.5 rounded-full font-bold text-xs">
+                        Бағасы: +100 ₸
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кофе Бөлімдері -->
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Бөлім 1: Кофе өнімдері -->
+                <div class="space-y-10">
+                    <div class="flex items-center gap-4 border-b border-white/10 pb-4">
+                        <span class="text-2xl text-[#d4a373]"><i class="fa-solid fa-mug-hot"></i></span>
+                        <h3 class="text-2xl font-bold font-serif text-white">Кофе Сусындары</h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Эспрессо -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Эспрессо</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық • Жарқын дәмді, қою кофенің негізі.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-[#d4a373] font-semibold border border-white/5">30 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto">
+                                <span class="text-2xl font-bold text-[#d4a373] font-serif">590 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Американо -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Американо</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Сүтсіз жеңіл кофе сусыны.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">300 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">500 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto flex md:flex-col justify-between items-center md:items-end">
+                                <span class="text-xs text-gray-400 md:hidden">Бағалары:</span>
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">790 / 890 / 1190 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Капучино -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Капучино</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Нәзік сүт көбігі мен эспрессо тепе-теңдігі.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">300 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">500 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto flex md:flex-col justify-between items-center md:items-end">
+                                <span class="text-xs text-gray-400 md:hidden">Бағалары:</span>
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">990 / 1090 / 1290 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Латте -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Латте</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Сүт мөлшері басым, жұмсақ кофе.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">300 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">500 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto flex md:flex-col justify-between items-center md:items-end">
+                                <span class="text-xs text-gray-400 md:hidden">Бағалары:</span>
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">990 / 1190 / 1290 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Флэт уайт (Тек 300 мл) -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center border-l-4 border-l-[#d4a373]">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-xl font-bold text-white mb-1">Флэт уайт</h4>
+                                    <span class="bg-[#d4a373]/20 text-[#d4a373] text-[10px] px-2 py-0.5 rounded-full font-bold">Таңдаулы</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық • Қос эспрессо мен барқыттай тегіс сүт құйылымы.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-[#d4a373]/10 px-3 py-1 rounded text-xs text-[#d4a373] font-bold border border-[#d4a373]/20">Тек 300 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto">
+                                <span class="text-2xl font-bold text-[#d4a373] font-serif">1090 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Раф -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Раф</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Кілегей мен ванильді қантпен шайқалған тәтті сусын.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">500 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto flex md:flex-col justify-between items-center md:items-end">
+                                <span class="text-xs text-gray-400 md:hidden">Бағалары:</span>
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">1390 / 1590 ₸</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Бөлім 2: Кофесіз сусындар -->
+                <div class="space-y-10">
+                    <div class="flex items-center gap-4 border-b border-white/10 pb-4">
+                        <span class="text-2xl text-[#d4a373]"><i class="fa-solid fa-mug-saucer"></i></span>
+                        <h3 class="text-2xl font-bold font-serif text-white">Кофесіз сусындар</h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Ыстық шоколад -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Ыстық шоколад</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Қою және тәтті бельгиялық шоколад сусыны.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto">
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">1290 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Матча латте -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Матча латте</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Пайдалы жапондық жасыл шай мен сүт қосындысы.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto">
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">1290 ₸</span>
+                            </div>
+                        </div>
+
+                        <!-- Чай латте -->
+                        <div class="coffee-card glass-panel p-6 rounded-2xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-1">Чай латте</h4>
+                                <p class="text-xs text-gray-400 mb-2">Ыстық / Мұздай • Хош иісті дәмдеуіштер (даршын, қалампыр) қосылған сүтті шай.</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-white/5 px-2.5 py-1 rounded text-xs text-gray-300">400 мл</span>
+                                </div>
+                            </div>
+                            <div class="text-right w-full md:w-auto">
+                                <span class="text-xl font-bold text-[#d4a373] font-serif">1290 ₸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ақпараттық блок -->
+                    <div class="bg-[#d4a373]/5 border border-[#d4a373]/20 rounded-2xl p-6 flex items-start gap-4">
+                        <span class="text-2xl text-[#d4a373] mt-1"><i class="fa-solid fa-circle-info"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white mb-1">Жеткізу немесе алып кету</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                Кез келген сусынды осы сайт арқылы WhatsApp-қа өтіп тапсырыс бере аласыз. Баристамыз сіз келгенше кофеңізді ыстық күйінде дайындап қояды!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Интерактивті Анимациялық Аймақ (PUSH) -->
+    <section id="interactive" class="py-20 bg-[#0e0a08] relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <span class="text-[#d4a373] font-semibold tracking-widest text-xs uppercase">Ойын-интерактив</span>
+            <h2 class="text-3xl md:text-4xl font-extrabold font-serif text-white mt-2 mb-6">
+                Кофе элементтерімен PUSH жасап көріңіз!
+            </h2>
+            <p class="text-gray-400 text-sm max-w-lg mx-auto mb-12">
+                Төмендегі арнайы аймақты экраннан <span class="text-[#d4a373] font-bold">PUSH</span> жасау (басу) арқылы жаңа кофе дәндері мен шыныаяқтарын тудырып, анимациялаңыз!
+            </p>
+
+            <!-- Анимациялық Интерактивті Алаң -->
+            <div id="interactive-zone" class="relative w-full h-80 bg-[#16100d] rounded-3xl border border-[#d4a373]/20 overflow-hidden shadow-inner flex items-center justify-center">
+                <span class="absolute text-sm text-gray-500 uppercase tracking-widest pointer-events-none select-none font-semibold">Жаңа дәм шығару үшін осы жерді PUSH етіңіз!</span>
+                
+                <!-- Басу аймағы -->
+                <div class="absolute inset-0 cursor-pointer" onclick="spawnCoffeeElement(event)"></div>
+                
+                <!-- Бастапқы қалқымалы элементтер -->
+                <div class="absolute top-10 left-12 text-5xl cursor-pointer anim-float-1 select-none interactive-bean" onclick="triggerPop(this)">🫘</div>
+                <div class="absolute top-40 right-16 text-6xl cursor-pointer anim-float-2 select-none interactive-bean" style="animation-delay: 1.5s;" onclick="triggerPop(this)">☕</div>
+                <div class="absolute bottom-12 left-1/3 text-5xl cursor-pointer anim-float-1 select-none interactive-bean" style="animation-delay: 3s;" onclick="triggerPop(this)">🥛</div>
+                <div class="absolute top-16 right-1/3 text-4xl cursor-pointer anim-float-2 select-none interactive-bean" style="animation-delay: 4.5s;" onclick="triggerPop(this)">🍂</div>
+            </div>
+
+            <!-- Шайқау түймесі -->
+            <button onclick="shakeAllElements()" class="mt-8 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-xs tracking-wider uppercase px-6 py-3 rounded-full transition-all duration-300">
+                <i class="fa-solid fa-wind mr-2"></i> Барлық элементке PUSH серпілісін беру
+            </button>
+        </div>
+    </section>
+
+    <!-- 4. Байланыс және Карта -->
+    <section id="contacts" class="py-24 relative overflow-hidden bg-[#120d0a] border-t border-[#d4a373]/10">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Сол жақ: Мекенжай мәліметтері -->
+            <div class="space-y-8">
+                <div class="space-y-3">
+                    <span class="text-[#d4a373] font-semibold tracking-widest text-xs uppercase">Біздің мекенжайымыз</span>
+                    <h2 class="text-4xl font-extrabold font-serif text-white">Бізге қонаққа келіңіз</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        KOFEiSH сізге әрдайым есігін айқара ашады. Жайлы атмосфера мен ең дәмді кофе сізді күтуде.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Мекенжай (2GIS Тікелей сілтеме) -->
+                    <a href="https://2gis.kz/almaty/search/Байзакова%20303" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-4 p-5 rounded-2xl glass-panel hover:bg-[#1c1410] border border-white/5 hover:border-[#d4a373]/40 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-full bg-[#d4a373]/10 flex items-center justify-center text-[#d4a373] text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg mb-1">Мекенжайымыз</h4>
+                            <p class="text-[#d4a373] font-semibold group-hover:underline">Алматы қ., Байзақов көшесі, 303 үй</p>
+                            <p class="text-xs text-gray-500 mt-1">Картада ашу және жол бағытын құру үшін басыңыз (2GIS / Maps)</p>
+                        </div>
+                    </a>
+
+                    <!-- Жұмыс уақыты -->
+                    <div class="flex items-start gap-4 p-5 rounded-2xl glass-panel border border-white/5">
+                        <div class="w-12 h-12 rounded-full bg-[#d4a373]/10 flex items-center justify-center text-[#d4a373] text-xl">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg mb-1">Жұмыс уақыты</h4>
+                            <p class="text-gray-300 text-sm">Дүйсенбі - Жексенбі: 08:00 - 18:00</p>
+                            <p class="text-xs text-gray-500 mt-1">Күнделікті үзіліссіз жұмыс жасаймыз</p>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp арқылы тікелей байланыс -->
+                    <a href="https://wa.me/77076929582" target="_blank" class="group flex items-start gap-4 p-5 rounded-2xl glass-panel hover:bg-[#1c1410] border border-white/5 hover:border-[#d4a373]/40 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg mb-1">Тапсырыс телефоны (WhatsApp)</h4>
+                            <p class="text-gray-300 text-sm group-hover:text-[#25D366] transition-colors">8 (707) 692-95-82</p>
+                            <p class="text-xs text-gray-500 mt-1">Тапсырысты WhatsApp арқылы жылдам рәсімдеу</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Оң жақ: Карта -->
+            <div class="relative w-full h-[400px] rounded-3xl overflow-hidden border border-[#d4a373]/20 shadow-2xl">
+                <iframe 
+                    class="w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2906.772481699564!2d76.908000!3d43.238000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38836ec2746ea5d5%3A0xc4eb090a9ec793f7!2z0YPQuy4g0JHQsNC50LfQsNC60L7QstCwIDMwMywg0JDQu9C80LDRgtGL!5e0!3m2!1sru!2skz!4v1700000000000" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                
+                <div class="absolute bottom-6 left-6 right-6 glass-panel p-4 rounded-xl flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-400">Алматы, Қазақстан</p>
+                        <p class="font-bold text-white text-sm">Байзақов көшесі, 303</p>
+                    </div>
+                    <a href="https://2gis.kz/almaty/search/Байзакова%20303" target="_blank" class="bg-[#d4a373] text-[#0c0806] px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-map-location-dot mr-1"></i> Навигатор
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-[#0c0806] border-t border-white/5 py-12 text-center text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-6 space-y-6">
+            <div class="flex justify-center items-center gap-3">
+                <div class="w-8 h-8 bg-[#d4a373] rounded-full flex items-center justify-center text-[#0c0806] font-bold text-md">
+                    <i class="fa-solid fa-mug-hot"></i>
+                </div>
+                <span class="text-xl font-bold tracking-widest text-[#d4a373] font-serif">KOFE<span class="text-white">iSH</span></span>
+            </div>
+            <p>© 2026 KOFEiSH. Барлық құқықтар қорғалған. Керемет әрі хош иісті кофе мекені.</p>
+            <div class="flex justify-center gap-6 text-lg text-gray-400">
+                <a href="https://wa.me/77076929582" target="_blank" class="hover:text-[#25D366] transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" class="hover:text-[#d4a373] transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://2gis.kz/almaty/search/Байзакова%20303" target="_blank" class="hover:text-[#d4a373] transition-colors"><i class="fa-solid fa-map"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипттер -->
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-3', 'shadow-2xl');
+                header.classList.remove('py-4');
+            } else {
+                header.classList.add('py-4');
+                header.classList.remove('py-3', 'shadow-2xl');
+            }
+        });
+
+        function triggerPop(element) {
+            element.style.transform = 'scale(1.5) rotate(20deg)';
+            setTimeout(() => {
+                element.style.transform = '';
+            }, 300);
+        }
+
+        const emojis = ['🫘', '☕', '🥛', '🌱', '🧁', '🍂', '🤎'];
+        function spawnCoffeeElement(event) {
+            const zone = document.getElementById('interactive-zone');
+            const rect = zone.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const newItem = document.createElement('div');
+            newItem.innerText = randomEmoji;
+            newItem.className = 'absolute text-4xl select-none cursor-pointer interactive-bean';
+            newItem.style.left = `${x - 20}px`;
+            newItem.style.top = `${y - 20}px`;
+            newItem.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            
+            const randomRotation = Math.random() * 360;
+            newItem.style.transform = `scale(0) rotate(${randomRotation}deg)`;
+
+            zone.appendChild(newItem);
+
+            setTimeout(() => {
+                newItem.style.transform = `scale(1) rotate(${randomRotation + 20}deg)`;
+            }, 50);
+
+            newItem.onclick = (e) => {
+                e.stopPropagation();
+                newItem.style.transform = 'scale(0) translateY(-50px)';
+                newItem.style.opacity = '0';
+                setTimeout(() => newItem.remove(), 500);
+            };
+        }
+
+        function shakeAllElements() {
+            const elements = document.querySelectorAll('.interactive-bean');
+            elements.forEach(el => {
+                const randomX = (Math.random() - 0.5) * 60;
+                const randomY = (Math.random() - 0.5) * 60;
+                const randomRot = (Math.random() - 0.5) * 90;
+                
+                el.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRot}deg) scale(1.2)`;
+                
+                setTimeout(() => {
+                    el.style.transform = '';
+                }, 800);
+            });
+        }
+    </script>
+</body>
+</html>
+
+```
